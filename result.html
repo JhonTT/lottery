@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="screen-orientation" content="portrait">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+    <title>中奖结果</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/wall.css">
+    <style type="text/css">
+        .wall {
+            overflow: scroll;
+            background-repeat: repeat;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mask {
+            -webkit-filter: blur(5px);
+            filter: blur(5px);
+        }
+
+        #main {
+            -webkit-transition: all 1s;
+            transition: all 1s;
+        }
+
+        .result-list {
+            text-align: center;
+            color: #4de7c8;
+            font-size: 30px;
+            line-height: 50px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            font-family: '幼圆';
+        }
+
+        .result-title {
+            text-align: center;
+            color: #4de7c8;
+            font-size: 40px;
+            margin-top: 100px;
+            font-family: '幼圆';
+        }
+
+        .title {
+            text-align: center;
+            color: #4de7c8;
+            font-size: 40px;
+            line-height: 100px;
+            font-family: '幼圆';
+            padding: 0;
+            margin: 0;
+        }
+
+        .none {
+            display: none;
+        }
+
+        marquee {
+            color: #fff;
+        }
+
+        span {
+            display: inline-block;
+            margin-right: 30px;
+        }
+
+        .lbl {
+            color: #4de7c8;
+            width: 220px;
+            float: left;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+
+        .prize_box {
+            font-size: 40px;
+        }
+
+        .prize_box .bd {
+            margin-left: 220px;
+            height: 100px;
+            line-height: 100px;
+            overflow: hidden;
+        }
+
+        .mar {
+            height: 100px;
+            line-height: 100px;
+        }
+
+        .titlebox {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+        }
+        .titlebox button{
+            display: inline-block;
+            zoom: 1;
+            line-height: normal;
+            white-space: nowrap;
+            vertical-align: middle;
+            text-align: center;
+            cursor: pointer;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            color: #fff;
+            border:none;
+            background-color: rgb(202, 60, 60);
+            height:35px;
+            width:90px;
+            border-radius: 4px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+        .font_small{
+            font-size:25px!important;
+            height:30px!important;
+            line-height: 30px!important;
+            transform:translateY(-30px)
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wall" id="main">
+        <h3 class="title">获奖名单</h3>
+        <div class="prize_box">
+            <div class="lbl">特等奖
+                <div class="font_small">（{{result1.length}}人）</div>
+            </div>
+            <div class="bd">
+                <marquee class="mar" scrollamount="20">
+                    <span v-for='(item,index) in result1' :key="index">{{item}}</span>
+                </marquee>
+            </div>
+        </div>
+        <div class="prize_box">
+            <div class="lbl">一等奖 
+                <div class="font_small">（{{result2.length}}人）</div>
+            </div>
+            <div class="bd">
+                <marquee class="mar" scrollamount="20">
+                    <span v-for='(item,index) in result2' :key="index">{{item}}</span>
+                </marquee>
+            </div>
+        </div>
+        <div class="prize_box">
+            <div class="lbl">二等奖
+                <div class="font_small">（{{result3.length}}人）</div>
+            </div>
+            <div class="bd">
+                <marquee class="mar" scrollamount="20">
+                    <span v-for='(item,index) in result3' :key="index">{{item}}</span>
+                </marquee>
+            </div>
+        </div>
+        <div class="prize_box">
+            <div class="lbl">三等奖
+                <div class="font_small">（{{result4.length}}人）</div>
+            </div>
+            <div class="bd">
+                <marquee class="mar" scrollamount="20">
+                    <span v-for='(item,index) in result4' :key="index">{{item}}</span>
+                </marquee>
+            </div>
+        </div>
+        <div class="prize_box">
+            <div class="lbl">幸运奖
+                <div class="font_small">（{{result5.length}}人）</div>
+            </div>
+            <div class="bd">
+                <marquee class="mar" scrollamount="20">
+                    <span v-for='(item,index) in result5' :key="index">{{item}}</span>
+                </marquee>
+            </div>
+        </div>
+        <div class="titlebox">
+            <button class="pure-button button-warning" @click="exportData">导出中奖名单</button>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            el: '#main',
+            data: {
+                animate: false,
+                result1: [],
+                result2: [],
+                result3: [],
+                result4: [],
+                result5: [],
+            },
+            mounted() {
+                let str_results = [];
+                let jsonResult = localStorage.getItem("choosed");
+                let resultAll = JSON.parse(jsonResult);
+                for (let item in resultAll) {
+                    if (resultAll[item] == '特等奖') {
+                        this.result1.push(item);
+                    } else if (resultAll[item] == '一等奖') {
+                        this.result2.push(item);
+                    } else if (resultAll[item] == '二等奖') {
+                        this.result3.push(item);
+                    } else if (resultAll[item] == '三等奖') {
+                        this.result4.push(item);
+                    } else if (resultAll[item] == '幸运奖') {
+                        this.result5.push(item);
+                    }
+                }
+                window.setInterval(function () {
+                    let jsonResult = localStorage.getItem("choosed");
+                    let resultAll = JSON.parse(jsonResult);
+                    let length = 0;
+                    for(var ever in resultAll) {
+                        length++;
+                    }
+                    let prizeNum = length;
+                    let num = Number(localStorage.getItem("num"));
+                    if(prizeNum !== num) {
+                        localStorage.setItem("num", prizeNum);
+                        location.reload(true);
+                    };
+                }, 1000 * 10);
+                // 遍历(排除choosed)
+                // for (let i = 0; i < localStorage.length; i++) {
+                //     if (localStorage.key(i) !== 'choosed') {
+                //         str_results.push(localStorage.getItem(localStorage.key(i)))
+                //     }
+                // }
+                // // 分割每个string, 并将</br>换成空格
+                // let results = []
+                // for (let nameList of str_results) {
+                //     let temp = JSON.parse(nameList)
+                //     temp = temp.map(item => { return item.replace(/<br\/>/g, ',') })
+                //     results.push(temp)
+                // }
+                // // 根据长度进行排序，名单短的放在前面
+                // results = results.sort((x, y) => { return x.length - y.length; })
+
+                // let returnResult = [];
+                // let returnResultArray = [];
+                // results.forEach(element => {
+                //     returnResultArray = returnResultArray.concat(element);
+                // })
+                // returnResultArray.forEach(element => {
+                //     let tmp = element.split(",");
+                //     let tmpObj = {};
+                //     tmpObj.name = tmp[0];
+                //     tmpObj.actno = tmp[1];
+                //     returnResult.push(tmpObj);
+                // })
+                // this.results = returnResult;
+            },
+            methods: {
+                spliceString: function (a, b) {
+                    let txtString = '';
+                    a.forEach(element => {
+                        let index = element.indexOf('-');
+                        let name = '';
+                        let actNo = '';
+                        if (index > 0) {
+                            name = element.substring(0, index);
+                            actNo = element.substring(index + 1);
+                        }
+                        txtString += name + "|" + actNo + "|" + b + "\r\n";
+                    });
+                    return txtString;
+                },
+                exportData: function () {
+                    let txtString = '';
+                    txtString += this.spliceString(this.result1, "特等奖");
+                    txtString += this.spliceString(this.result2, "一等奖");
+                    txtString += this.spliceString(this.result3, "二等奖");
+                    txtString += this.spliceString(this.result4, "三等奖");
+                    txtString += this.spliceString(this.result5, "幸运奖");
+                    const base64 = (s) => {
+                        return window.btoa(unescape(encodeURIComponent(s)));
+                    }
+                    const uri = 'data:text/plain;charset=UTF-8;base64,';
+                    const url = uri + base64(txtString);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = '全部中奖名单.txt';
+                    a.click();
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
