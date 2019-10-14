@@ -1,5 +1,5 @@
 # 抽奖小程序
-
+[演示deno](https://jhontt.github.io/lottery)
 ## 抽奖流程：
 
 1. 在中奖人数输入框中输入中奖人数（1-50）
